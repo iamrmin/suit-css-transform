@@ -1,0 +1,234 @@
+﻿<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery-3.1.1.min.js"></script>
+    <style type="text/css">
+        .maintable td {
+            height: 110px;
+            width: 110px;
+            border: 5px solid gray;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .maintable {
+        }
+
+        .t1 a {
+            height: 120px;
+            width: 120px;
+            display: block;
+            border: 1px solid #ececec;
+            vertical-align: middle;
+            text-align: center;
+            background: #fff;
+        }
+
+        .t1 {
+            display: none;
+            position: absolute;
+            z-index: 10;
+        }
+
+        .viewport-fluid {
+            z-index: -1;
+            border-left: 0;
+            border-right: 0;
+            background-color: #fff;
+            position: absolute;
+            top: 0px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 1920px;
+        }
+
+        #canvasses .canvas.suit-main {
+            background-position: center top;
+            background-size: auto 130%;
+        }
+
+        #canvasses .canvas {
+            background-position: center top;
+            background-size: 120% auto;
+        }
+
+        @media (min-width: 1152px) 99f8633….css:416 .responsive .viewport-fluid .canvas {
+            max-width: 1920px;
+        }
+
+        .viewport-fluid .canvas {
+            opacity: 0;
+            z-index: 1;
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: 100% auto;
+            background-color: white;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+            .viewport-fluid .canvas#canvas-back {
+                -moz-transition: none;
+                -o-transition: none;
+                -webkit-transition: none;
+                transition: none;
+                opacity: 1;
+            }
+
+        .viewport-fluid #canvas-back {
+            -moz-transition: transform 0.2s;
+            -o-transition: transform 0.2s;
+            -webkit-transition: transform 0.2s;
+            transition: transform 0.2s;
+        }
+
+        .viewport-fluid .canvas.show {
+            -moz-transition: opacity 500ms;
+            -o-transition: opacity 500ms;
+            -webkit-transition: opacity 500ms;
+            transition: opacity 500ms;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <table class="maintable">
+        <tr>
+            <td>
+                <a href="javascript:void(0)" id="aFit">
+                    <img src="suits/slim.svg" id="imgFit" />
+                </a>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="javascript:void(0)" id="aFabric">
+                    <img src="suits/black.png" id="imgFabric" />
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <div id="fabricItem" class="t1" style="top: 140px;left: 148px;">
+        <ol style="list-style-type: none; margin: 0px;padding: 0px; display: inline-flex;">
+            <li>
+                <a href="javascript:fabricChange('black')">
+                    <img src="suits/black.png" />
+                </a>
+            </li>
+            <li>
+                <a href="javascript:fabricChange('gray')">
+                    <img src="suits/gray.png" />
+                </a>
+            </li>
+            <li>
+                <a href="javascript:fabricChange('sand')">
+                    <img src="suits/sand.png" />
+                </a>
+            </li>
+        </ol>
+    </div>
+
+    <div id="fitItem" class="t1" style="top: 10px;left: 148px;">
+        <ol style="list-style-type: none; margin: 0px;padding: 0px; display: inline-flex;">
+            <li>
+                <a href="javascript:fitChange('slim')">
+                    <img src="suits/slim.svg" style="margin-top: 20px;" />
+                </a>
+            </li>
+            <li>
+                <a href="javascript:fitChange('skinny')">
+                    <img src="suits/skinny.svg" style="margin-top: 20px;" />
+                </a>
+            </li>
+            <li>
+                <a href="javascript:fitChange('regular')">
+                    <img src="suits/regular.svg" style="margin-top: 20px;" />
+                </a>
+            </li>
+        </ol>
+    </div>
+
+    <div id="viewport" class="viewport-fluid landscape">
+        <div id="canvasses">
+            <div id="canvas-back" class="canvas suit-main flash"></div>
+            <div id="canvas-front" class="canvas suit-main"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        var newImage = new Image();
+        var fit = "slim";
+        var fabric = "black";
+
+        $(document).ready(function () {
+
+            $("#aFit").on("click", function () {
+                $("#fabricItem, #fitItem").hide();
+                $("#fitItem").show();
+            });
+
+            $("#aFabric").on("click", function () {
+                $("#fabricItem, #fitItem").hide();
+                $("#fabricItem").show();
+            });
+
+            $(document).on("click", function (e) {
+                if (e.target == $("html")[0] || e.target == document.body) {
+                    $("#fabricItem, #fitItem").hide();
+                }
+            });
+        });
+
+        function change(fabric, fit) {
+
+            var newFile = "suits/" + fit + "/" + fabric + ".jpg";
+
+            newImage.onload = function () {
+                $('#canvas-front').css('background-image', 'url(' + newFile + ')');
+                $('#canvas-front').attr('class', 'canvas suit-main show');
+                setTimeout(function () {
+                    $('#canvas-back').css('background-image', 'url(' + newFile + ')');
+                    $('#canvas-back').attr('class', 'canvas suit-main');
+                    $('#canvas-front').removeClass('show');
+                }, 500);
+            }
+
+            newImage.src = newFile;
+
+
+        }
+
+        function fitChange(type) {
+
+            $("#imgFit").attr("src", "suits/" + type + ".svg");
+
+            fit = type;
+            change(fabric, fit);
+        }
+
+        function fabricChange(type) {
+
+            $("#imgFabric").attr("src", "suits/" + type + ".png");
+
+            fabric = type;
+            change(fabric, fit);
+        }
+
+    </script>
+
+</body>
+</html>
